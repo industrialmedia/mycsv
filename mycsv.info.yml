@@ -1,0 +1,11 @@
+name: mycsv
+description: My csv import and export
+package: AAMID
+type: module
+core: 8.x
+version: 1.0
+
+configure: mycsv.admin.import
+
+
+

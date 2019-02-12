@@ -1,0 +1,19 @@
+mycsv.admin.import:
+  path: '/admin/myapi/csv'
+  defaults:
+    _form: '\Drupal\mycsv\Form\MycsvImportForm'
+    _title: 'Import CSV'
+  requirements:
+    _permission: 'administer mycsv import'
+  options:
+    _admin_route: TRUE
+
+mycsv.admin.export:
+  path: '/admin/myapi/csv/export'
+  defaults:
+    _form: '\Drupal\mycsv\Form\MycsvExportForm'
+    _title: 'Export CSV'
+  requirements:
+    _permission: 'administer mycsv export'
+
+

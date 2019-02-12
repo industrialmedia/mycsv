@@ -1,0 +1,12 @@
+mycsv.admin.import:
+  route_name: mycsv.admin.import
+  title: 'Import'
+  base_route: mycsv.admin.import
+  weight: 0
+
+mycsv.admin.export:
+  route_name: mycsv.admin.export
+  title: 'Export'
+  base_route: mycsv.admin.import
+  weight: 10
+

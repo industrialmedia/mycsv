@@ -1,0 +1,6 @@
+mycsv.admin.import:
+  title: 'CSV import/export'
+  description: 'Import and export content using CSV file.'
+  route_name: mycsv.admin.import
+  parent: myapi.admin
+  weight: 500

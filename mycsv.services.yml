@@ -1,0 +1,7 @@
+services:
+  plugin.manager.mycsv.import:
+    class: Drupal\mycsv\MycsvPluginManager
+    arguments: ['import', '@container.namespaces', '@cache.discovery', '@module_handler']
+  plugin.manager.mycsv.export:
+    class: Drupal\mycsv\MycsvPluginManager
+    arguments: ['export', '@container.namespaces', '@cache.discovery', '@module_handler']

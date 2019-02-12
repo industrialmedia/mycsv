@@ -1,0 +1,7 @@
+administer mycsv import:
+  title: 'Administer mycsv import'
+  restrict access: TRUE
+
+administer mycsv export:
+  title: 'Administer mycsv export'
+  restrict access: TRUE
