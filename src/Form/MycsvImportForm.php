@@ -231,8 +231,7 @@ class MycsvImportForm extends ConfigFormBase implements ContainerInjectionInterf
       $fid_old = $config->get('fids.' . $import_plugin);
       $fid_form = $form_state->getValue('file')[0];
       if (empty($fid_old) || $fid_old != $fid_form) {
-        if (!empty($fid_old)) {
-          $previous_file = File::load($fid_old);
+        if (!empty($fid_old) && $previous_file = File::load($fid_old)) {
           $this->fileUsage->delete($previous_file, 'mycsv', 'config_form', $previous_file->id());
         }
         $new_file = File::load($fid_form);
