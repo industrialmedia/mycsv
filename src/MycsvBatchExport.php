@@ -3,12 +3,17 @@
 namespace Drupal\mycsv;
 
 
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Messenger\MessengerTrait;
+
 /**
  * Class MycsvBatchExport.
  *
  * @package Drupal\mycsv
  */
 class MycsvBatchExport {
+
+  use MessengerTrait;
 
 
   /**
@@ -45,7 +50,7 @@ class MycsvBatchExport {
     $filename = $plugin_id . '.csv';
     $conf_path = \Drupal::service('site.path');
     $directory = $conf_path . '/files/mycsv/export';
-    file_prepare_directory($directory, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
+    \Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::MODIFY_PERMISSIONS | FileSystemInterface::CREATE_DIRECTORY);
     $file_path = $directory . '/' . $filename;
     $this->filePath = $file_path;
 
@@ -129,11 +134,12 @@ class MycsvBatchExport {
     else {
       $message = t('Finished with an error.');
     }
-    drupal_set_message($message);
+    $this->messenger()->addMessage($message);
 
     $message = '<h2><a href="/' . $this->filePath . '?t=' . time() . '">Скачать</a></h2>';
     $message = \Drupal\Core\Render\Markup::create($message);
-    drupal_set_message($message);
+    $this->messenger()->addMessage($message);
   }
+
 
 }

@@ -2,6 +2,7 @@
 
 namespace Drupal\mycsv;
 
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\file\Entity\File;
 
 
@@ -12,6 +13,7 @@ use Drupal\file\Entity\File;
  */
 class MycsvBatchImport {
 
+  use MessengerTrait;
 
   /**
    * The batch object.
@@ -107,7 +109,8 @@ class MycsvBatchImport {
     else {
       $message = t('Finished with an error.');
     }
-    drupal_set_message($message);
+    $this->messenger()->addMessage($message);
   }
+
 
 }
