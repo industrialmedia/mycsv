@@ -1,2 +1,3 @@
 print_header_line: 1
+delimiter: ';'
 chunk_size: 20

@@ -11,7 +11,8 @@ use Drupal\Core\Messenger\MessengerTrait;
  *
  * @package Drupal\mycsv
  */
-class MycsvBatchExport {
+class MycsvBatchExport
+{
 
   use MessengerTrait;
 
@@ -40,12 +41,15 @@ class MycsvBatchExport {
    *   The mycsv plugin.
    * @param bool $print_header_line
    *   Is print header line
+   * @param string $delimiter
+   *    The delimiter of one batch operation
    * @param int $chunk_size
    *    The chunk size of one batch operation
    * @param string $batch_name
    *    The batch name
    */
-  public function __construct($plugin_id, MycsvExportPluginInterface $mycsv_plugin, $print_header_line = TRUE, $chunk_size = 20, $batch_name = 'CSV export') {
+  public function __construct($plugin_id, MycsvExportPluginInterface $mycsv_plugin, $print_header_line = TRUE, $delimiter = ';', $chunk_size = 20, $batch_name = 'CSV export')
+  {
 
     $filename = $plugin_id . '.csv';
     $conf_path = \Drupal::service('site.path');
@@ -58,7 +62,7 @@ class MycsvBatchExport {
     if ($print_header_line) {
       $data = $mycsv_plugin->getHeaderData();
       if (!empty($data)) {
-        fputcsv($handle, $data, ",", '"');
+        fputcsv($handle, $data, $delimiter, '"');
       }
     }
     fclose($handle);
@@ -74,13 +78,11 @@ class MycsvBatchExport {
     foreach ($chunks as $data) {
       $this->batch['operations'][] = [
         [get_class($this), 'processBatchOperation'],
-        [get_class($mycsv_plugin), $file_path, $data]
+        [get_class($mycsv_plugin), $file_path, $delimiter, $data]
       ];
     }
 
   }
-
-
 
 
   /**
@@ -90,17 +92,20 @@ class MycsvBatchExport {
    *   The mycsv plugin class name.
    * @param string $file_path
    *   The file path for export.
+   * @param string $delimiter
+   *   The delimiter for csv.
    * @param array $ids
    *   The ids.
    * @param array $context
    *   The batch context information.
    */
-  public static function processBatchOperation($mycsv_plugin_class_name, $file_path, array $ids, array &$context) {
+  public static function processBatchOperation($mycsv_plugin_class_name, $file_path, $delimiter, array $ids, array &$context)
+  {
     $handle = fopen($file_path, 'a');
     foreach ($ids as $id) {
       $context_message = '';
       $data = $mycsv_plugin_class_name::getData($id, $context_message);
-      fputcsv($handle, $data, ",", '"');
+      fputcsv($handle, $data, $delimiter, '"');
       $context['message'] = $context_message;
       $context['results'][] = $id;
     }
@@ -111,7 +116,8 @@ class MycsvBatchExport {
   /**
    * Adds a new batch.
    */
-  public function setBatch() {
+  public function setBatch()
+  {
     batch_set($this->batch);
   }
 
@@ -126,12 +132,12 @@ class MycsvBatchExport {
    * @param string[] $operations
    *   If $success is FALSE, contains the operations that remained unprocessed.
    */
-  public function finished($success, array $results, array $operations) {
+  public function finished($success, array $results, array $operations)
+  {
     if ($success) {
       $message = \Drupal::translation()
         ->formatPlural(count($results), 'One post processed.', '@count posts processed.');
-    }
-    else {
+    } else {
       $message = t('Finished with an error.');
     }
     $this->messenger()->addMessage($message);

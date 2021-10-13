@@ -148,6 +148,13 @@ class MycsvExportForm extends ConfigFormBase implements ContainerInjectionInterf
       '#title' => t('Print header line'),
       '#default_value' => $config->get('print_header_line'),
     ];
+    $form['additional_settings']['delimiter'] = [
+      '#type' => 'textfield',
+      '#title' => t('Delimiter'),
+      '#default_value' => $config->get('delimiter'),
+      '#required' => TRUE,
+      '#size' => 3,
+    ];
     $form['additional_settings']['chunk_size'] = [
       '#type' => 'number',
       '#title' => t('Chunk size'),
@@ -182,6 +189,7 @@ class MycsvExportForm extends ConfigFormBase implements ContainerInjectionInterf
     $config = $this->config('mycsv.export');
     $form_state->setRebuild();
     $config->set('print_header_line', $form_state->getValue('print_header_line'));
+    $config->set('delimiter', $form_state->getValue('delimiter'));
     $config->set('chunk_size', $form_state->getValue('chunk_size'));
     $config->save();
   }
@@ -192,11 +200,12 @@ class MycsvExportForm extends ConfigFormBase implements ContainerInjectionInterf
   public function startExport(array &$form, FormStateInterface $form_state) {
     $config = $this->config('mycsv.export');
     $print_header_line = $config->get('print_header_line');
+    $delimiter = $config->get('delimiter');
     $chunk_size = $config->get('chunk_size');
     $plugin_id = $form_state->getValue('export_plugin');
     /* @var \Drupal\mycsv\MycsvExportPluginInterface $mycsvPlugin */
     $mycsvPlugin = $this->mycsvPluginManager->createInstance($plugin_id);
-    $export = new MycsvBatchExport($plugin_id, $mycsvPlugin, $print_header_line, $chunk_size);
+    $export = new MycsvBatchExport($plugin_id, $mycsvPlugin, $print_header_line, $delimiter, $chunk_size);
     $export->setBatch();
   }
 
