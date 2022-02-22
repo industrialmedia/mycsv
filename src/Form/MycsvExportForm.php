@@ -123,9 +123,9 @@ class MycsvExportForm extends ConfigFormBase implements ContainerInjectionInterf
 
     $form['export_plugin'] = [
       '#title' => $this->t('Select content type to export'),
-      '#type' => 'select',
+      '#type' => 'radios', //'select',
       '#options' => $plugins,
-      '#empty_option' => '- Select -',
+      // '#empty_option' => '- Select -',
       '#required' => TRUE,
       '#default_value' => $export_plugin ? $export_plugin : NULL,
     ];
@@ -136,11 +136,12 @@ class MycsvExportForm extends ConfigFormBase implements ContainerInjectionInterf
       '#submit' => ['::submitForm', '::startExport'],
       '#weight' => 100,
       '#name' => 'start_export',
+      '#button_type' => 'primary',
     ];
 
 
     $form['additional_settings'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => t('Additional settings'),
     ];
     $form['additional_settings']['print_header_line'] = [
@@ -163,7 +164,10 @@ class MycsvExportForm extends ConfigFormBase implements ContainerInjectionInterf
       '#min' => 1,
     ];
 
-    return parent::buildForm($form, $form_state);
+    $form = parent::buildForm($form, $form_state);
+    $form['actions']['submit']['#button_type'] = 'danger';
+    return $form;
+    
   }
 
   /**

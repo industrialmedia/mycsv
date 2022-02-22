@@ -123,9 +123,9 @@ class MycsvImportForm extends ConfigFormBase implements ContainerInjectionInterf
 
     $form['import_plugin'] = [
       '#title' => $this->t('Select content type to import'),
-      '#type' => 'select',
+      '#type' => 'radios', //'select',
       '#options' => $plugins,
-      '#empty_option' => '- Select -',
+      //'#empty_option' => '- Select -',
       '#required' => TRUE,
       '#default_value' => $import_plugin ? $import_plugin : NULL,
       '#ajax' => [
@@ -165,12 +165,13 @@ class MycsvImportForm extends ConfigFormBase implements ContainerInjectionInterf
         '#submit' => ['::submitForm', '::startImport'],
         '#weight' => 100,
         '#name' => 'start_import',
+        '#button_type' => 'primary',
       ];
     }
 
 
     $form['additional_settings'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => t('Additional settings'),
     ];
     $form['additional_settings']['skip_first_line'] = [
@@ -201,7 +202,9 @@ class MycsvImportForm extends ConfigFormBase implements ContainerInjectionInterf
       '#min' => 1,
     ];
 
-    return parent::buildForm($form, $form_state);
+    $form = parent::buildForm($form, $form_state);
+    $form['actions']['submit']['#button_type'] = 'danger';
+    return $form;
   }
 
   /**

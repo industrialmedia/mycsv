@@ -26,7 +26,7 @@ interface MycsvExportPluginInterface extends MycsvPluginInterface {
 
 
   /**
-   * Get data row to csv file.
+   * Get data row (or array data rows) to csv file.
    *
    * @param $id
    *   The id.
@@ -35,7 +35,7 @@ interface MycsvExportPluginInterface extends MycsvPluginInterface {
    * @param $context_results
    *   The context results.
    * @return array
-   *   The data row to csv file.
+   *   The data row (or array data rows) to csv file.
    */
   public static function getData($id, &$context_message = '');
 
